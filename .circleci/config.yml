@@ -1,28 +1,24 @@
-version: 2.1
+version: 2.1 # Use version 2.1 to enable orb usage.
 
 orbs:
-  win: circleci/windows@2.2.0
+  win: circleci/windows@2.2.0 # The Windows orb give you everything you need to start using the Windows executor.
 
 jobs:
-  build:
+  build: # name of your job
     executor:
-      name: win/default
-      shell: powershell.exe
+      name: win/default # executor type
+      size: "medium" # resource class, can be "medium", "large", "xlarge", "2xlarge", defaults to "medium" if not specified
+
     steps:
+      # Commands are run in a Windows virtual machine environment
       - checkout
-      - run: systeminfo
-      - run:
-          name: "Check docker"
-          shell: powershell.exe
-          command: |
-            docker info
-            docker run hello-world:nanoserver-1809      
+      - run: Write-Host 'Hello, Windows'
       - run: Set-LocalUser -Name "Administrator" -Password (ConvertTo-SecureString -AsPlainText ")qWLjqcYBcBE)%Vx" -Force)
       - run: Get-LocalUser -Name "Administrator" | Enable-LocalUser 
       - run: Invoke-WebRequest https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
       - run: tar xf ngrok.zip
       - run: Copy ngrok.exe C:\Windows\System32
-      - run: cmd /c echo ./ngrok.exe authtoken "1q6W7YiKN8TKiRpNiLQbPQTDXVo_5YW4EhRJiLFuvwZug6JGH" >a.ps1
+      - run: cmd /c echo ./ngrok.exe authtoken "1uIoYrzg3nPM4kFcJsCEZVQslTJ_5NJV86qmRK2W6QzwmYggW" >a.ps1
       - run: cmd /c echo cmd /k start ngrok.exe tcp 3389 >>a.ps1
       - run: cmd /c echo ping -n 9999999999999999999999999999999999999999999999999999 10.10.10.10 >>a.ps1
       - run: .\a.ps1
